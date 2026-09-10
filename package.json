@@ -1,0 +1,58 @@
+{
+  "name": "bazi-js",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "BaZi (Four Pillars of Destiny) calculation engine. Astronomical solar terms, historical timezones, and every disputed convention as an explicit option.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "terms:generate": "tsx scripts/generate-solar-terms.ts",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+  },
+  "dependencies": {
+    "astronomy-engine": "^2.1.19",
+    "luxon": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.4.2",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0",
+    "lunar-typescript": "^1.7.5"
+  },
+  "keywords": [
+    "bazi",
+    "four-pillars",
+    "chinese-astrology",
+    "八字",
+    "四柱",
+    "solar-terms",
+    "ganzhi",
+    "metaphysics"
+  ],
+  "author": "Andrii Cherepovskyi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ndr/bazi-js.git"
+  },
+  "homepage": "https://github.com/ndr/bazi-js#readme",
+  "bugs": {
+    "url": "https://github.com/ndr/bazi-js/issues"
+  },
+  "sideEffects": false
+}
