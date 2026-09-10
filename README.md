@@ -10,6 +10,12 @@ stem and branch indices) and leaves presentation to you.
 npm install bazi-js
 ```
 
+Not on npm yet — until it is, install straight from the repository:
+
+```bash
+npm install github:ndr/bazi-js
+```
+
 ```ts
 import { calculateChart } from 'bazi-js';
 
