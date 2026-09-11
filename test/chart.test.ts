@@ -65,6 +65,40 @@ describe('day boundary at 23:00', () => {
   });
 });
 
+describe('子 hour split at midnight', () => {
+  const gz = (p: { stem: number; branch: number }) =>
+    STEMS[p.stem]!.char + BRANCHES[p.branch]!.char;
+  // Control case: the clock says 00:30, true solar time is 23:30 the evening before.
+  const odesa = {
+    date: '1994-06-26', time: '00:30', timeZone: 'Europe/Kyiv', longitude: 30.72,
+    gender: 'male' as const,
+  };
+
+  it('keeps the day but takes the hour stem from the next day under 晚子時', () => {
+    const c = calculateChart(odesa);
+    expect(c.resolved.trueSolarTime.slice(0, 16)).toBe('1994-06-25T23:30');
+    expect(gz(c.pillars.day)).toBe('壬午');
+    expect(STEMS[c.resolved.hourStemBase!]!.char).toBe('癸');
+    expect(gz(c.pillars.hour!)).toBe('壬子');
+  });
+
+  it('gives the same hour pillar under 早子時, where the day has already turned', () => {
+    const c = calculateChart({ ...odesa, options: { dayBoundary: '23:00' } });
+    expect(gz(c.pillars.day)).toBe('癸未');
+    expect(gz(c.pillars.hour!)).toBe('壬子');
+  });
+
+  it('gives both halves of one 子 hour the same pillar', () => {
+    const at = (date: string, time: string) => calculateChart({
+      date, time, ...KYIV, gender: 'male', options: { solarTime: 'off', dayBoundary: '00:00' },
+    });
+    const before = at('2000-06-15', '23:30');
+    const after = at('2000-06-16', '00:30');
+    expect(before.pillars.day.stem).not.toBe(after.pillars.day.stem);
+    expect(gz(before.pillars.hour!)).toBe(gz(after.pillars.hour!));
+  });
+});
+
 describe('historical timezones', () => {
   it('applies Soviet decree time in Kyiv', () => {
     expect(chart({ date: '1929-06-15' }).resolved.tzOffsetMinutes).toBe(120);

@@ -60,6 +60,12 @@ chart, so a result is always reproducible and always self-describing.
 `luckStartMethod` can differ by a whole year: a birth on 1986-07-28 17:20 starts
 its luck cycles at 6 under `'exact'` and at 7 under `'rounded'`.
 
+`dayBoundary` moves only the day pillar. The 子 hour spans midnight, and
+23:00–23:59 takes its hour stem from the following day under either convention.
+With `'00:00'` the day stays put while the hour already looks ahead: 1994-06-26
+00:30 in Odesa is true solar 23:30 on the 25th — day 壬午, hour 壬子. The stem
+the hour was read from is returned as `chart.resolved.hourStemBase`.
+
 ## What it computes
 
 Four pillars · hidden stems (藏干) · Ten Gods (十神) · NaYin (納音) · the twelve
@@ -75,7 +81,7 @@ an independent implementation derived from Chinese almanac sources.
 |---|---|---|
 | Four pillars | 3000+ samples, 1900–2100 | no disagreement |
 | Day pillar | every day of six full years | no disagreement |
-| Day boundary, both conventions | 408 samples around the 子 hour | no disagreement |
+| Day and hour pillars, both day boundaries | 408 samples around the 子 hour | no disagreement |
 | Luck pillars, both schools × both genders | 440 samples | no disagreement |
 | Solar term instants | 3618 terms, 1900–2100 | median 10 s, p99 43 s, max 62 s |
 

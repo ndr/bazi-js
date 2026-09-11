@@ -157,6 +157,12 @@ export interface ResolvedTime {
   equationOfTimeMinutes: number;
   /** Julian Day Number of the true-solar civil date, after day-boundary shift. */
   julianDay: number;
+  /**
+   * The day stem 五鼠遁 read for the hour stem, or null with an unknown time.
+   * The day master, except 23:00–23:59 under 晚子時: that half of 子 already
+   * reads the next day's stem while the day pillar stays.
+   */
+  hourStemBase: StemIndex | null;
   /** Nearest of the 24 terms either side, whichever kind. */
   prevTerm: SolarTermMark;
   nextTerm: SolarTermMark;

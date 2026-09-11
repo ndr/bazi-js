@@ -110,12 +110,13 @@ describe('day boundary conventions', () => {
         for (const [hh, mm] of [[22, 59], [23, 0], [23, 30], [23, 59], [0, 0], [0, 30]] as [number, number][]) {
           const d = new Date(Date.UTC(y, m - 1, dd, hh, mm));
           const ref = reference(d);
-          if (gz(compute(d, 'male', '23:00').pillars.day) !== ref.getDayInGanZhiExact()) {
-            early.push(d.toISOString());
-          }
-          if (gz(compute(d, 'male', '00:00').pillars.day) !== ref.getDayInGanZhiExact2()) {
-            late.push(d.toISOString());
-          }
+          const e = compute(d, 'male', '23:00');
+          const l = compute(d, 'male', '00:00');
+          if (gz(e.pillars.day) !== ref.getDayInGanZhiExact()) early.push(`${d.toISOString()} day`);
+          if (gz(l.pillars.day) !== ref.getDayInGanZhiExact2()) late.push(`${d.toISOString()} day`);
+          // The hour pillar is the same under both: 23:00–23:59 reads the next day's stem.
+          if (gz(e.pillars.hour!) !== ref.getTimeInGanZhi()) early.push(`${d.toISOString()} hour`);
+          if (gz(l.pillars.hour!) !== ref.getTimeInGanZhi()) late.push(`${d.toISOString()} hour`);
         }
       }
     }

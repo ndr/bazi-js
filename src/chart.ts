@@ -35,8 +35,15 @@ export function calculateChart(input: BirthInput): BaziChart {
   const year = yearPillar(baziYear);
   const month = monthPillar(year.stem, monthTerm.index);
   const day = dayPillar(resolved.julianDayNumber);
+  // 子 spans midnight, and 23:00–23:59 takes its 五鼠遁 stem from the next
+  // day's stem. Under 早子時 the day pillar has already turned over, so that is
+  // the day pillar itself; under 晚子時 the day stays and only the hour looks ahead.
+  const hourStemDay =
+    options.dayBoundary === '00:00' && resolved.tst.hour === 23
+      ? dayPillar(resolved.julianDayNumber + 1)
+      : day;
   const hour =
-    resolved.hourBranch === null ? null : hourPillar(day.stem, resolved.hourBranch);
+    resolved.hourBranch === null ? null : hourPillar(hourStemDay.stem, resolved.hourBranch);
 
   // With an unknown birth time, a 節 landing on the birth date makes the month
   // pillar a coin flip — say so rather than presenting a guess as fact.
@@ -90,6 +97,7 @@ export function calculateChart(input: BirthInput): BaziChart {
       longitudeCorrectionMinutes: Math.round(resolved.longitudeCorrectionMinutes * 100) / 100,
       equationOfTimeMinutes: Math.round(resolved.equationOfTimeMinutes * 100) / 100,
       julianDay: resolved.julianDayNumber,
+      hourStemBase: hour ? hourStemDay.stem : null,
       prevTerm: prev,
       nextTerm: next,
       monthTerm,
